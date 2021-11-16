@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
-import AddPokemon from './Components/AddPokemon';
+import NewPokemon from './Components/NewPokemon';
+import EditPokemon from './Components/EditPokemon';
 import Main from "./Main.js"
 
 function App() {
@@ -12,7 +13,10 @@ function App() {
             <Main></Main>
           </Route>
           <Route exact path='/api/pokemon/newpokemon'>
-            <AddPokemon></AddPokemon>
+            <NewPokemon></NewPokemon>
+          </Route>
+          <Route exact path='/api/pokemon/edit/:id'>
+            <EditPokemon></EditPokemon>
           </Route>
         </Switch>
       </BrowserRouter>

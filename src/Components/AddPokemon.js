@@ -1,36 +1,42 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useHistory} from "react-router-dom"
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default () => {
-    const [name, setName] = useState(""); 
-    const [type, setType] = useState("");
+export default (props) => {
+    const { initialName, initialType, initialButton, errors, onSubmitProp } = props;
+    const [name, setName] = useState(initialName);
+    const [type, setType] = useState(initialType);
+    const [button, setButton] = useState(initialButton);
+    const history = useHistory();
+
+
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:8000/api/pokemon/new', {
-            name,
-            type,
-        })
-            .then(res=>console.log('response',res))
-            .catch(err=>console.log('Error',err))
+        onSubmitProp({name,type});
     }
+
+    const cancel = (e) => {
+        e.preventDefault();
+        history.push('/')
+    }
+
     return (
         <>
-        <h1>Add New Favorite Pokémon</h1>
-        <form onSubmit={onSubmitHandler}>
-            <p>
-                <label>Name</label><br/>
-                <input type="text" onChange={(e)=>setName(e.target.value)} value={name}/>
-            </p>
-            <p>
-                <label>Type</label><br/>
-                <input type="text" onChange={(e)=>setType(e.target.value)} value={type}/>
-            </p>
-            <Link to ={'/'}>
-            <input type="submit" value='Create'/>
-            </Link>
-        </form>
+            <form onSubmit={onSubmitHandler}>
+                <p style={{ color: 'red' }}>{errors.name?.message}</p>
+                <p>
+                    <label>Name</label><br />
+                    <input type="text" name="name" onChange={(e) => setName(e.target.value)} value={name} />
+                </p>
+                <p style={{ color: 'red' }}>{errors.type?.message}</p>
+                <p>
+                    <label>Type</label><br/>
+                    <input type="text" name="type" onChange={(e) => setType(e.target.value)} value={type} />
+                </p>
+                    <input type="submit" value={button} />
+            </form>
+            <br></br>
+            <button onClick={cancel}>Cancel</button>
         </>
     )
 }
